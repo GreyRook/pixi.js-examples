@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!--
+    Port of EaselJS Graphics API Example
+
+    https://github.com/CreateJS/EaselJS/blob/master/examples/GraphicsTest.html
+    -->
+    <title>pixi.js example - Graphics</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+    </style>
+
+    <script src="../../bin/pixi.js"></script>
+
+</head>
+<body>
+<script>
+    // create an new instance of a pixi stage
+    var stage = new PIXI.Stage(0xFFFFFF, true);
+
+    stage.interactive = true;
+
+    var rendererOptions = { antialias: true };
+    // create a renderer instance
+    var renderer;
+    var width = 960;
+    var height = 400;
+    if(location.search.indexOf('webgl') > -1) {
+        renderer = new PIXI.WebGLRenderer(width, height, rendererOptions);
+    } else if(location.search.indexOf('canvas') > -1) {
+        renderer = new PIXI.CanvasRenderer(width, height, rendererOptions);
+    } else {
+        renderer = PIXI.autoDetectRenderer(width, height, rendererOptions);
+    }
+
+    var img = PIXI.Texture.fromImage("daisy.png");
+
+    // add render view to DOM
+    document.body.appendChild(renderer.view);
+
+    var canvas, w, h;
+
+    function layout() {
+        var arr = [createStar, createHex, createLineTo, createRadialGradientFill, createEllipse, createRectGradientFill, createBitmapFill, createRoundRect];
+        var padding = 5;
+        var _width = 155;
+        var _height = 155;
+        var cols = 4;
+        var space = 0;
+        var l = arr.length;
+        var border = createBorder();
+
+        /*
+         for (var i = 0; i < l; i++) {
+         var tile = arr[i]();
+         tile.x = 42 + (_width + padding) * (i % cols);
+         tile.y = 42 + (i / cols | 0) * (_height + padding);
+         stage.addChild(tile);
+         }
+         */
+
+        stage.addChild(border);
+
+
+    }
+
+    function render() {
+        renderer.render(stage);
+        requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+
+    function createBorder() {
+        var g = new PIXI.Graphics();
+        g.lineStyle(32, 0xFF0000, 1);
+        g.lineBitmapStyle(img);
+        g.drawRect(20, 20, 920, 360);
+        return g;
+    }
+
+    function createBitmapFill() {
+        var g = new PIXI.Graphics();
+        var mtx = new createjs.Matrix2D().rotate(1);
+        g.beginBitmapFill(img, null, mtx).setStrokeStyle(8).beginRadialGradientStroke(["#FFF", "#000"], [0, 1], 0, 0, 0, 0, 30, 130).drawRect(0, 0, 130, 130);
+        g.x = 12;
+        g.y = 10;
+        return g;
+    }
+
+    function createRectGradientFill() {
+        var g = new PIXI.Graphics();
+        g.beginLinearGradientFill(["#FFF", "#000"], [0, 1], 0, 0, 0, 130).drawRect(0, 0, 130, 130);
+        g.x = 12;
+        g.y = 10;
+        return g;
+    }
+
+    function createEllipse() {
+        var g = new PIXI.Graphics();
+        g.f(createjs.getRGB(0, 0x66, 0x99, 0.5)).setStrokeStyle(4).beginLinearGradientStroke(["#F00", "#000"], [0, 1], 0, 0, 70, 140).drawEllipse(0, 0, 70, 140, 8);
+        g.x = 40;
+        g.y = 10;
+        return g;
+    }
+
+    function createRadialGradientFill() {
+        var g = new PIXI.Graphics();
+        g.ss(8).beginStroke("#f0f").beginRadialGradientFill(["#FFF", "#0FF"], [0, 1], 0, 0, 0, 0, 0, 40).drawCircle(0, 0, 40);
+        g.x = g.y = 80;
+        return g;
+    }
+
+    function createLineTo() {
+        var g = new PIXI.Graphics();
+        g.setStrokeStyle(16, "round", "round").beginStroke("#f90").moveTo(20, 10).lineTo(90, 90).lineTo(90, 140);
+        return g;
+    }
+
+    function createHex() {
+        var g = new PIXI.Graphics();
+        g.beginFill("#0F0").drawPolyStar(0, 0, 40, 6).drawPolyStar(0, 75, 40, 6);
+        g.x = 80;
+        g.y = 40;
+        return g;
+    }
+
+    function createStar() {
+        var g = new PIXI.Graphics();
+        g.setStrokeStyle(1).beginStroke(createjs.getRGB(255, 255, 0)).beginFill("#FF0").endStroke().drawPolyStar(0, 0, 80, 5, 0.6, -90);
+        g.x = 80;
+        g.y = 85;
+        return g;
+    }
+
+    function createRoundRect() {
+        var g = new PIXI.Graphics();
+        g.setStrokeStyle(6).beginStroke("red").beginFill("green").drawRoundRect(0, 0, 130, 130, 30);
+        g.x = g.y = 12;
+        return g;
+    }
+
+    function createTile() {
+        var g = new PIXI.Graphics();
+        g.graphics.beginFill('#CCCCCC').drawRect(0, 0, 155, 155).endFill();
+        g.alpha = 0.25;
+        return g;
+    }
+
+    layout();
+</script>
+
+</body>
+</html>
