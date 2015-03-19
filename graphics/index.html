@@ -46,7 +46,9 @@
     var canvas, w, h;
 
     function layout() {
-        var arr = [createStar, createHex, createLineTo, createRadialGradientFill, createEllipse, createRectGradientFill, createBitmapFill, createRoundRect];
+        // only selected ones for now
+        // var arr = [createStar, createHex, createLineTo, createRadialGradientFill, createEllipse, createRectGradientFill, createBitmapFill, createRoundRect];
+        var arr = [createBitmapFill];
         var padding = 5;
         var _width = 155;
         var _height = 155;
@@ -55,39 +57,42 @@
         var l = arr.length;
         var border = createBorder();
 
-        /*
-         for (var i = 0; i < l; i++) {
-         var tile = arr[i]();
-         tile.x = 42 + (_width + padding) * (i % cols);
-         tile.y = 42 + (i / cols | 0) * (_height + padding);
-         stage.addChild(tile);
-         }
-         */
+        for (var i = 0; i < l; i++) {
+            var tile = arr[i]();
+            tile.x = 42 + (_width + padding) * (i % cols);
+            tile.y = 42 + (i / cols | 0) * (_height + padding);
+            stage.addChild(tile);
+        }
+
 
         stage.addChild(border);
-
-
     }
 
+    // Render Loop
     function render() {
         renderer.render(stage);
         requestAnimationFrame(render);
     }
-
     requestAnimationFrame(render);
 
     function createBorder() {
         var g = new PIXI.Graphics();
+        var m = new PIXI.Matrix();
         g.lineStyle(32, 0xFF0000, 1);
-        g.lineBitmapStyle(img);
+        g.lineBitmapStyle(img, m);
         g.drawRect(20, 20, 920, 360);
         return g;
     }
 
     function createBitmapFill() {
         var g = new PIXI.Graphics();
-        var mtx = new createjs.Matrix2D().rotate(1);
-        g.beginBitmapFill(img, null, mtx).setStrokeStyle(8).beginRadialGradientStroke(["#FFF", "#000"], [0, 1], 0, 0, 0, 0, 30, 130).drawRect(0, 0, 130, 130);
+        var m = new PIXI.Matrix();
+        m.rotate(1);
+        g.beginBitmapFill(img, m);
+        g.lineStyle(8);
+        // g.beginRadialGradientStroke(["#FFF", "#000"], [0, 1], 0, 0, 0, 0, 30, 130)
+        g.drawRect(0, 0, 130, 130);
+        g.endFill();
         g.x = 12;
         g.y = 10;
         return g;
