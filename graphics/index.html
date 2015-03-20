@@ -83,6 +83,7 @@
     function createBorder() {
         var g = new PIXI.Graphics();
         var m = new PIXI.Matrix();
+        m.rotate(0.1);
         g.lineStyle(32, 0xFF0000, 1);
         g.lineBitmapStyle(img, m);
         g.drawRect(20, 20, 920, 360);
@@ -92,7 +93,7 @@
     function createBitmapFill() {
         var g = new PIXI.Graphics();
         var m = new PIXI.Matrix();
-        m.rotate(1);
+        m.rotate(-0.1);
         g.beginBitmapFill(img, m);
         g.lineStyle(8);
         // g.beginRadialGradientStroke(["#FFF", "#000"], [0, 1], 0, 0, 0, 0, 30, 130)
